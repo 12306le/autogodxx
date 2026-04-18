@@ -147,6 +147,32 @@ panel.setXY((winX0 + dx) | 0, (winY0 + dy) | 0);
 
 **规则**:凡是把 **变量或表达式** 传给 AIGame 的 `int` 参数时,统一加 `| 0`;字面量可省略但加了更稳。
 
+## 12.6. 顶层代码 vs 变量声明顺序(Rhino TDZ)
+
+Rhino 对 `let` / `const` 的 hoisting 行为不稳定。把"调用"写在"声明"之前,会让变量处于 TDZ(临时死区),执行到就抛 `ReferenceError`,脚本立刻结束。
+
+```javascript
+// ❌ 立刻崩:启动代码被放最前,SW 还没声明
+if ($permit.hasFloaty()) {
+    showBall();   // 内部访问 SW → ReferenceError
+}
+const SW = $device.width;
+let x = Math.round(SW - 180);
+
+// ✅ 声明在前,启动在后
+const SW = $device.width;
+let x = Math.round(SW - 180);
+function showBall() { ... }
+
+if ($permit.hasFloaty()) {
+    showBall();
+}
+```
+
+症状很迷惑:有的设备上"立刻结束",有的(Rhino 更宽松的版本)则 `SW` 为 `undefined`,后续 `SW - 180 = NaN`,`setXY(NaN | 0, NaN | 0) = setXY(0, 0)`,窗口出现在左上角看似"能跑但位置全错"。
+
+**规则**:顶层代码一律按 `常量 → let → function → 启动调用` 四段顺序组织;启动永远写在文件最后。
+
 ## 13. 把 E4X 当成普通 JSX / XML 字符串
 
 AIGame 里的 UI 布局有时是 E4X(XML 字面量)或字符串模板,语义不同:

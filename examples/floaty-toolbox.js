@@ -6,43 +6,30 @@
 //   3. 拾取坐标模式中间区域完全透明,能看清下面的应用
 //   4. 拖动时限制在屏幕内,防止拖飞
 //   5. 所有 setXY / setText 参数显式 int(Rhino Number → Java int 坑)
+//   6. 顶层 const/let 必须在 init() 调用前就绪,否则 Rhino TDZ 立刻崩
 // ============================================================
 
-// ---------- 1. 权限前置 ----------
-if (!$permit.hasFloaty()) {
-    toast("请授予悬浮窗权限后重新运行");
-    $permit.floaty();
-} else {
-    $floaty.closeAll();
-    init();
-}
-
-// ---------- 2. 状态 ----------
-// 屏幕尺寸(像素)。setXY 用 px,XML 里的 w/h 用 dp,换算粗略 1dp≈3px
+// ---------- 1. 状态(必须先声明) ----------
 const SW = $device.width;
 const SH = $device.height;
 
-// 悬浮球 & 面板 共享位置
 let x = Math.round(SW - 180);   // 靠右
 let y = Math.round(SH * 0.35);  // 中上
 
-// MotionEvent action 常量
 const A_DOWN = 0;
 const A_UP = 1;
 const A_MOVE = 2;
 
-// 拖动辅助(给 attachDrag 用)
 let downRawX = 0;
 let downRawY = 0;
 let winStartX = 0;
 let winStartY = 0;
 let dragged = false;
 
-// 粗略边界估算(避免球/面板拖出屏幕)
-const BALL_SAFE = 180;      // 球所占 px 上限
-const PANEL_W_PX = 720;     // 面板宽度 px 估计
+const BALL_SAFE = 180;
+const PANEL_W_PX = 720;
 
-// ---------- 3. 工具 ----------
+// ---------- 2. 工具 ----------
 function clamp(v, lo, hi) {
     if (v < lo) return lo;
     if (v > hi) return hi;
@@ -101,12 +88,7 @@ function attachDrag(floaty, dragZoneId, afterConstrain, onClick) {
     });
 }
 
-// ---------- 4. 启动 ----------
-function init() {
-    showBall();
-}
-
-// ---------- 5. 悬浮球 ----------
+// ---------- 4. 悬浮球 ----------
 function showBall() {
     constrainBall();
 
@@ -270,4 +252,14 @@ function ensureAct(panel) {
 
 function setStatus(panel, msg) {
     panel.id("status").setText(msg);
+}
+
+// ---------- 9. 启动(放在最后,确保所有 const/let 已就绪) ----------
+if (!$permit.hasFloaty()) {
+    toast("请授予悬浮窗权限后重新运行");
+    $permit.floaty();
+} else {
+    $floaty.closeAll();
+    showBall();
+    toast("悬浮工具箱已启动,点击球展开");
 }
