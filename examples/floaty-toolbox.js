@@ -63,7 +63,9 @@ function showMainPanel() {
 `);
 
     // 初始位置
-    panel.setXY(panelX, panelY);
+    // 注意:Rhino 的 Number 默认是 double,AIGame 的 setXY 只认 int,
+    // 必须用 `| 0` 强制 ToInt32,否则会抛 "找不到方法 setXY(Double,Double)"
+    panel.setXY(panelX | 0, panelY | 0);
 
     // 文字颜色(setColor 来自 docs/api_cn-text.md)
     panel.id("title").setColor("#FFFFFFFF");
@@ -83,8 +85,8 @@ function showMainPanel() {
             return true;
         }
         if (a == A_MOVE) {
-            panelX = Math.round(winX0 + rx - dragRawX0);
-            panelY = Math.round(winY0 + ry - dragRawY0);
+            panelX = (winX0 + rx - dragRawX0) | 0;
+            panelY = (winY0 + ry - dragRawY0) | 0;
             panel.setXY(panelX, panelY);
             return true;
         }
