@@ -1,0 +1,92 @@
+{
+  "name": "aigame-skill",
+  "version": "1.0.0",
+  "variant": "optimized-complete-docs",
+  "source_zip": "AI智能体文档-260130.zip",
+  "upstream_reference": "https://github.com/12306le/autogodx",
+  "description": "Claude Code Skill for AIGame / AutoGOD / AutoGODX Android automation scripts (Rhino JS).",
+  "license": "MIT (skill metadata/index) / docs © AIGame official",
+  "doc_files_count": 261,
+  "demo_group_files_count": 43,
+  "files": {
+    "entry": [
+      "SKILL.md"
+    ],
+    "guides": [
+      "CODING-RULES.md",
+      "SCENARIOS.md",
+      "QUICK-START.md",
+      "PITFALLS.md",
+      "MODULES.md",
+      "INDEX.md"
+    ],
+    "whitelists": [
+      "api-whitelist-zh.md",
+      "demo-whitelist-en.md",
+      "DOCS-INDEX.md",
+      "COVERAGE-NOTES.md"
+    ],
+    "docs_dir": "docs/",
+    "demo_files": [
+      "demo-act.md",
+      "demo-alert.md",
+      "demo-app.md",
+      "demo-arc.md",
+      "demo-bus.md",
+      "demo-canvas.md",
+      "demo-color.md",
+      "demo-crypt.md",
+      "demo-date.md",
+      "demo-device.md",
+      "demo-dialog.md",
+      "demo-draw.md",
+      "demo-e4x-support.md",
+      "demo-engine.md",
+      "demo-event.md",
+      "demo-excel.md",
+      "demo-ext.md",
+      "demo-fc.md",
+      "demo-file.md",
+      "demo-floaty.md",
+      "demo-global-functions.md",
+      "demo-http.md",
+      "demo-img.md",
+      "demo-log.md",
+      "demo-media.md",
+      "demo-module-development.md",
+      "demo-ocr.md",
+      "demo-permit.md",
+      "demo-project-examples.md",
+      "demo-qr.md",
+      "demo-res.md",
+      "demo-screen.md",
+      "demo-script-language.md",
+      "demo-sqlite.md",
+      "demo-str.md",
+      "demo-sys.md",
+      "demo-task.md",
+      "demo-thread.md",
+      "demo-tip.md",
+      "demo-touch.md",
+      "demo-tts.md",
+      "demo-ui.md",
+      "demo-ws.md"
+    ],
+    "meta": [
+      "README.md",
+      "LICENSE",
+      ".gitignore",
+      "manifest.json"
+    ]
+  },
+  "improvements_over_upstream": [
+    "Added SCENARIOS.md: user-intent to module mapping",
+    "Added QUICK-START.md: 10 copy-paste templates",
+    "Added PITFALLS.md: 15 common anti-patterns",
+    "Added MODULES.md: functional grouping of all $ modules",
+    "Rewrote SKILL.md to enforce progressive loading",
+    "Rewrote CODING-RULES.md with explicit permission matrix and conflict arbitration",
+    "Rewrote README.md for GitHub contributors",
+    "Added MIT LICENSE and .gitignore"
+  ]
+}

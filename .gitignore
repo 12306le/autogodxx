@@ -1,0 +1,27 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Temp
+*.tmp
+*.log
+/tmp/
+
+# Python / node noise (in case someone clones near)
+__pycache__/
+node_modules/
+*.pyc
+
+# Archive/build artifacts
+*.zip
+*.tar.gz
+dist/
+build/
+
+# Local settings
+.claude/settings.local.json
