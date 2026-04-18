@@ -122,6 +122,31 @@ AIGame 许多 API 失败时返回 `null` / `false` 而不是抛异常。**别用
 
 先照抄,跑通,再改。
 
+## 12.5. Rhino Number → Java int 的隐式转换会失败
+
+Rhino 里所有数字都是 **double**。AIGame 很多接受 `int` 参数的方法(`setXY` / `setX` / `setY` / `setW` / `setH` / `setWH` 等)在混淆后的类里只保留了 `int` 重载,传 double 会报:
+
+```
+找不到方法 "xxx.setXY(ni.zc,ni.zc)"   // zc 是混淆后的 Double
+```
+
+症状尤其阴险:**字面量** 能跑(`panel.setXY(100, 200)` OK),**变量 / 表达式** 不能跑(`panel.setXY(x, y)` 全挂)。这是因为 Rhino 对字面量有编译期常量折叠,运行时 Number 则传 double。
+
+一旦这类异常抛在初始化期,后续所有 `click` / `setOnTouchListener` 绑定都未执行,用户只会看到"界面显示了但点了没反应"。
+
+```javascript
+// ❌ 看似一样,运行时会爆
+panel.setXY(panelX, panelY);
+
+// ✅ `| 0` 强制 ToInt32
+panel.setXY(panelX | 0, panelY | 0);
+
+// ✅ 计算结果也要转
+panel.setXY((winX0 + dx) | 0, (winY0 + dy) | 0);
+```
+
+**规则**:凡是把 **变量或表达式** 传给 AIGame 的 `int` 参数时,统一加 `| 0`;字面量可省略但加了更稳。
+
 ## 13. 把 E4X 当成普通 JSX / XML 字符串
 
 AIGame 里的 UI 布局有时是 E4X(XML 字面量)或字符串模板,语义不同:
